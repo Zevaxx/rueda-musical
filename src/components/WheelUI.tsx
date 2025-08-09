@@ -1,5 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { NOTES_5THS_ES, NOTES_5THS_ES_ENHARM, REL_MINOR_ES_ENHARM, degToRad, getMajorScale, getMajorKeyChordsEnglish, getMajorKeyChordsSpanish, toSpanishTitle } from '../wheel'
+import { 
+  NOTES_5THS_ES, NOTES_5THS_ES_ENHARM, NOTES_5THS_EN, NOTES_5THS_EN_ENHARM,
+  REL_MINOR_ES_ENHARM, REL_MINOR_EN_ENHARM, 
+  degToRad, getMajorScale, getMajorKeyChordsEnglish, getMajorKeyChordsSpanish, 
+  toTitle 
+} from '../wheel'
 import { NotationToggle, type NotationType } from './NotationToggle'
 import './wheel.css'
 
@@ -104,10 +109,15 @@ export function WheelUI() {
   const fourthIdx = (rootIdx + 11) % 12
   const fifthIdx = (rootIdx + 1) % 12
 
+  // Choose the appropriate arrays based on notation
+  const notesArray = notation === 'spanish' ? NOTES_5THS_ES : NOTES_5THS_EN
+  const notesEnharmArray = notation === 'spanish' ? NOTES_5THS_ES_ENHARM : NOTES_5THS_EN_ENHARM
+  const relMinorArray = notation === 'spanish' ? REL_MINOR_ES_ENHARM : REL_MINOR_EN_ENHARM
+
   const [root, fourth, fifth] = [
-    NOTES_5THS_ES[rootIdx],
-    NOTES_5THS_ES[fourthIdx],
-    NOTES_5THS_ES[fifthIdx],
+    notesArray[rootIdx],
+    notesArray[fourthIdx],
+    notesArray[fifthIdx],
   ]
 
   // Palette inspired by Mapuche colors
@@ -162,10 +172,10 @@ export function WheelUI() {
     <div className="wheel-wrap">
       <div className="ui-layout">
         <aside className="summary">
-          <h3>Tonalidad: {toSpanishTitle(NOTES_5THS_ES[rootIdx])} mayor</h3>
+          <h3>Tonalidad: {toTitle(notesArray[rootIdx], notation)} mayor</h3>
           <ul>
-            {getMajorScale(NOTES_5THS_ES[rootIdx]).map((n, i) => (
-              <li key={i}><span className="deg">{['I','II','III','IV','V','VI','VII'][i]}</span><span className="note">{toSpanishTitle(n)}</span></li>
+            {getMajorScale(notesArray[rootIdx]).map((n, i) => (
+              <li key={i}><span className="deg">{['I','II','III','IV','V','VI','VII'][i]}</span><span className="note">{toTitle(n, notation)}</span></li>
             ))}
           </ul>
         </aside>
@@ -264,7 +274,7 @@ export function WheelUI() {
           <circle cx={cx} cy={cyTop} r={topRadius} fill="url(#gradTop)" stroke={colors.mapuBlue} strokeWidth={outerStroke} />
           <circle cx={cx} cy={cyTop} r={topRadius} fill="url(#mapuPattern)" opacity="0.16" />
           <circle cx={cx} cy={cyTop} r={topRadius * 0.86} fill="none" stroke={colors.mapuYellow} strokeWidth={outerStroke * 0.6} />
-          {NOTES_5THS_ES.map((_, i) => {
+          {notesArray.map((_, i) => {
             const p1 = polarToCartesian(cx, cyTop, topRadius * 0.9, i * STEP_DEG)
             const p2 = polarToCartesian(cx, cyTop, topRadius * 0.2, i * STEP_DEG)
             return (
@@ -277,15 +287,15 @@ export function WheelUI() {
 
     {/* Upright labels positioned with rotation offset; show enharmonic display for outer ring.
         Only two visible rings now (outer I, middle IV). */}
-        {NOTES_5THS_ES.map((_, i) => {
+        {notesArray.map((_, i) => {
           const angle = i * STEP_DEG + rotation
           const pRoot = polarToCartesian(cx, cyTop, rOuter, angle)
           const pFourth = polarToCartesian(cx, cyTop, rMid, angle)
           // Middle ring now shows the relative minor as in the reference image
-          const nFourth = REL_MINOR_ES_ENHARM[i]
+          const nFourth = relMinorArray[i]
           return (
             <g key={`labels-${i}`} className="note-labels">
-              <text x={pRoot.x} y={pRoot.y} textAnchor="middle" dominantBaseline="middle" className="note-root">{NOTES_5THS_ES_ENHARM[i]}</text>
+              <text x={pRoot.x} y={pRoot.y} textAnchor="middle" dominantBaseline="middle" className="note-root">{notesEnharmArray[i]}</text>
               <text x={pFourth.x} y={pFourth.y} textAnchor="middle" dominantBaseline="middle" className="note-sub">{nFourth}</text>
             </g>
           )
@@ -333,7 +343,7 @@ export function WheelUI() {
           <label className="picker">
             <span>Nota:</span>
             <select value={rootIdx} onChange={(e) => setKeyByIndex(parseInt(e.target.value, 10))}>
-              {NOTES_5THS_ES.map((n, idx) => (
+              {notesArray.map((n, idx) => (
                 <option key={n} value={idx}>{n}</option>
               ))}
             </select>
@@ -383,8 +393,8 @@ export function WheelUI() {
               <tr>
                 {(() => {
                   const chords = notation === 'spanish' 
-                    ? getMajorKeyChordsSpanish(NOTES_5THS_ES[rootIdx])
-                    : getMajorKeyChordsEnglish(NOTES_5THS_ES[rootIdx], rootIdx>=6)
+                    ? getMajorKeyChordsSpanish(notesArray[rootIdx])
+                    : getMajorKeyChordsEnglish(notesArray[rootIdx], rootIdx>=6)
                   return chords.map((c, i) => (
                     <td key={i}>{c}</td>
                   ))
