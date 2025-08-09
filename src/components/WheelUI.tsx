@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { NOTES_5THS_ES, NOTES_5THS_ES_ENHARM, REL_MINOR_ES_ENHARM, degToRad, getMajorScale, getMajorKeyChordsEnglish, toSpanishTitle } from '../wheel'
+import { NOTES_5THS_ES, NOTES_5THS_ES_ENHARM, REL_MINOR_ES_ENHARM, degToRad, getMajorScale, getMajorKeyChordsEnglish, getMajorKeyChordsSpanish, toSpanishTitle } from '../wheel'
+import { NotationToggle, type NotationType } from './NotationToggle'
 import './wheel.css'
 
 const STEP_DEG = 360 / 12
@@ -13,6 +14,7 @@ function polarToCartesian(cx: number, cy: number, r: number, angleFromTopDeg: nu
 
 export function WheelUI() {
   const [rotation, setRotation] = useState(0)
+  const [notation, setNotation] = useState<NotationType>('spanish')
   const svgRef = useRef<SVGSVGElement | null>(null)
   const [size, setSize] = useState<Size>({ width: 760, height: 900 })
 
@@ -366,6 +368,9 @@ export function WheelUI() {
           </button>
         </div>
 
+        {/* Notation toggle */}
+        <NotationToggle notation={notation} onChange={setNotation} />
+
         {/* Tabla dinámica de acordes en la tonalidad actual (como en la imagen) */}
         <div className="chord-table-wrap">
           <table className="chord-table" aria-label="Acordes en mayor">
@@ -376,9 +381,14 @@ export function WheelUI() {
             </thead>
             <tbody>
               <tr>
-                {getMajorKeyChordsEnglish(NOTES_5THS_ES[rootIdx], rootIdx>=6).map((c, i) => (
-                  <td key={i}>{c}</td>
-                ))}
+                {(() => {
+                  const chords = notation === 'spanish' 
+                    ? getMajorKeyChordsSpanish(NOTES_5THS_ES[rootIdx])
+                    : getMajorKeyChordsEnglish(NOTES_5THS_ES[rootIdx], rootIdx>=6)
+                  return chords.map((c, i) => (
+                    <td key={i}>{c}</td>
+                  ))
+                })()}
               </tr>
             </tbody>
           </table>
