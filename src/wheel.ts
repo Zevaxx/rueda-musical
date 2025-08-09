@@ -135,5 +135,20 @@ export function getMajorKeyChordsEnglish(root: string, preferFlat = false): stri
 	})
 }
 
+// Build the diatonic triads for a major key in Spanish chord notation
+// Returns array of length 7 with chord symbols like: ["Do", "Rem", "Mim", "Fa", "Sol", "Lam", "Si°"]
+export function getMajorKeyChordsSpanish(root: string): string[] {
+	const scale = getMajorScale(root)
+	// Qualities for I..VII triads in major
+	const qualities: Array<'M'|'m'|'dim'> = ['M','m','m','M','M','m','dim']
+	return scale.map((n, i) => {
+		const base = toSpanishTitle(n)
+		const q = qualities[i]
+		if (q === 'M') return base
+		if (q === 'm') return `${base}m`
+		return `${base}°`
+	})
+}
+
 // Convenience to get Spanish title-cased note (e.g., "Do") for labels
 export function toSpanishTitle(note: string): string { return toTitleEs(note) }
