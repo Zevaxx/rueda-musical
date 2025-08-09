@@ -17,6 +17,23 @@ export const NOTES_5THS_ES = [
 	'FA',
 ]
 
+// Circle of fifths (clockwise) in English note names.
+// Starting at the top position (index 0) with C, then +5 each step.
+export const NOTES_5THS_EN = [
+	'C',
+	'G',
+	'D',
+	'A',
+	'E',
+	'B',
+	'F#',
+	'C#',
+	'G#',
+	'D#',
+	'A#',
+	'F',
+]
+
 // Display names with enharmonic pairs where common in Spanish
 export const NOTES_5THS_ES_ENHARM = [
 	'Do',
@@ -31,6 +48,22 @@ export const NOTES_5THS_ES_ENHARM = [
 	'Mib/Re#',
 	'Sib/La#',
 	'Fa',
+]
+
+// Display names with enharmonic pairs where common in English
+export const NOTES_5THS_EN_ENHARM = [
+	'C',
+	'G',
+	'D',
+	'A',
+	'E',
+	'B',
+	'Gb/F#',
+	'Db/C#',
+	'Ab/G#',
+	'Eb/D#',
+	'Bb/A#',
+	'F',
 ]
 
 export function degToRad(d: number) {
@@ -48,16 +81,32 @@ export const CHROMATIC_ES = [
 	'DO', 'DO#', 'RE', 'RE#', 'MI', 'FA', 'FA#', 'SOL', 'SOL#', 'LA', 'LA#', 'SI',
 ]
 
-const chromaIndex: Record<string, number> = CHROMATIC_ES
+// Chromatic scale in English with sharps (ascending from C)
+export const CHROMATIC_EN = [
+	'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B',
+]
+
+const chromaIndexEs: Record<string, number> = CHROMATIC_ES
+	.reduce((acc, n, i) => { acc[n] = i; return acc }, {} as Record<string, number>)
+
+const chromaIndexEn: Record<string, number> = CHROMATIC_EN
 	.reduce((acc, n, i) => { acc[n] = i; return acc }, {} as Record<string, number>)
 
 // Major scale degrees in semitones relative to root
 const MAJOR_DEGREES = [0, 2, 4, 5, 7, 9, 11]
 
 export function getMajorScale(root: string): string[] {
-	const i = chromaIndex[root]
+	// Try Spanish first, then English
+	let i = chromaIndexEs[root]
+	let chromatic = CHROMATIC_ES
+	
+	if (i === undefined) {
+		i = chromaIndexEn[root]
+		chromatic = CHROMATIC_EN
+	}
+	
 	if (i === undefined) return [root]
-	return MAJOR_DEGREES.map((d) => CHROMATIC_ES[(i + d) % 12])
+	return MAJOR_DEGREES.map((d) => chromatic[(i + d) % 12])
 }
 
 // Convert 'DO', 'DO#' to 'Do', 'Do#' for display
@@ -69,6 +118,11 @@ export function toTitleEs(note: string): string {
 	if (!m) return note
 	const [, base, acc] = m
 	return `${baseMap[base]}${acc}`
+}
+
+// Convert 'C', 'C#' to 'C', 'C#' for display (English notes are already in correct case)
+export function toTitleEn(note: string): string {
+	return note
 }
 
 // Prefer flat spellings for sectors on the "flat side" of the circle (Gb, Db, Ab, Eb, Bb)
@@ -103,6 +157,23 @@ export const REL_MINOR_ES_ENHARM = [
 	'Dom',        // Mib/Re# mayor
 	'Solm',       // Sib/La# mayor
 	'Rem',        // Fa mayor
+]
+
+// Relative minor names for each sector in English notation
+// Index aligned with NOTES_5THS_EN / NOTES_5THS_EN_ENHARM
+export const REL_MINOR_EN_ENHARM = [
+	'Am',         // C major
+	'Em',         // G major
+	'Bm',         // D major
+	'F#m',        // A major
+	'C#m',        // E major
+	'G#m',        // B major
+	'Ebm/D#m',    // Gb/F# major
+	'Bbm',        // Db/C# major
+	'Fm',         // Ab/G# major
+	'Cm',         // Eb/D# major
+	'Gm',         // Bb/A# major
+	'Dm',         // F major
 ]
 
 // --- English display helpers (for chord table like the image) ---
@@ -152,3 +223,11 @@ export function getMajorKeyChordsSpanish(root: string): string[] {
 
 // Convenience to get Spanish title-cased note (e.g., "Do") for labels
 export function toSpanishTitle(note: string): string { return toTitleEs(note) }
+
+// Convenience to get English title-cased note (e.g., "C") for labels  
+export function toEnglishTitle(note: string): string { return toTitleEn(note) }
+
+// Get title in the appropriate notation
+export function toTitle(note: string, notation: 'spanish' | 'english'): string {
+	return notation === 'spanish' ? toSpanishTitle(note) : toEnglishTitle(note)
+}
