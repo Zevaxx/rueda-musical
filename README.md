@@ -23,5 +23,13 @@ npm run build
 npm run preview
 ```
 
+## Deployment
+El proyecto se despliega automáticamente en GitHub Pages cuando se hacen cambios en la rama `main`. También se puede desplegar manualmente:
+```pwsh
+npm run deploy
+```
+
+Vista en vivo: https://zevaxx.github.io/rueda-musical
+
 ## Créditos
 - Proyecto generado y ajustado con asistencia de IA; creado con fines educativos y de experimentación.
