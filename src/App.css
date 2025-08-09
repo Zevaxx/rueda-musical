@@ -19,5 +19,13 @@ body {
   width: 100%;
 }
 
+/* Mobile app layout */
+@media (max-width: 768px) {
+  .app-root {
+    padding: 16px 8px 12px;
+    place-items: start center;
+  }
+}
+
 /* Evitar selección global al arrastrar */
 * { -webkit-user-select: none; user-select: none; }

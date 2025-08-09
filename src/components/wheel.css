@@ -13,10 +13,26 @@
   position: relative;
 }
 
+/* Mobile wheel wrap */
+@media (max-width: 768px) {
+  .wheel-wrap {
+    gap: 8px;
+    padding: 0;
+  }
+}
+
 .wheel-svg {
   width: min(92vw, 900px);
   height: auto;
   font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif;
+}
+
+/* Mobile wheel sizing */
+@media (max-width: 768px) {
+  .wheel-svg {
+    width: min(95vw, 500px);
+    max-width: 500px;
+  }
 }
 
 /* Two-column layout: summary (left), svg (right) */
@@ -29,6 +45,15 @@
   max-width: 1200px;
 }
 
+/* Mobile-first responsive layout */
+@media (max-width: 768px) {
+  .ui-layout {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    max-width: 100%;
+  }
+}
+
 .wheel-col { display: flex; flex-direction: column; align-items: center; gap: 8px; }
 
 .summary {
@@ -38,6 +63,16 @@
   border-radius: 10px;
   padding: 10px 12px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+}
+
+/* Mobile optimizations for summary */
+@media (max-width: 768px) {
+  .summary {
+    padding: 12px 16px;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 400px;
+  }
 }
 .summary h3 {
   margin: 4px 0 8px;
@@ -50,6 +85,34 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 6px;
+}
+
+/* Mobile layout for summary */
+@media (max-width: 768px) {
+  .summary h3 {
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  
+  .summary ul {
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 8px;
+    text-align: center;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 480px) {
+  .summary h3 {
+    font-size: 18px;
+  }
+  
+  .summary ul {
+    grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+    gap: 6px;
+    font-size: 14px;
+  }
 }
 .summary li { display: grid; grid-template-columns: 28px 1fr; align-items: center; }
 .summary .deg { font-weight: 900; opacity: 0.8; }
@@ -74,6 +137,61 @@
 .roman-note { font-size: 12px; font-weight: 800; fill: #333; opacity: 0.9; }
 
 .controls { display: flex; gap: 10px; align-items: center; justify-content: center; margin-top: 6px; }
+
+/* Mobile controls optimization */
+@media (max-width: 768px) {
+  .controls {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0 16px;
+  }
+  
+  .controls button {
+    min-height: 44px; /* Touch target size */
+    min-width: 44px;
+    padding: 8px 12px;
+  }
+  
+  .current-key {
+    min-width: 80px;
+    font-size: 16px;
+  }
+  
+  .picker {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+  
+  .picker select {
+    min-height: 44px;
+    padding: 8px 12px;
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+}
+
+/* Very small screens - compact controls */
+@media (max-width: 480px) {
+  .controls {
+    gap: 6px;
+    padding: 0 12px;
+  }
+  
+  .controls button {
+    min-width: 40px;
+    padding: 6px 10px;
+    font-size: 14px;
+  }
+  
+  .current-key {
+    min-width: 70px;
+    font-size: 14px;
+  }
+  
+  .picker select {
+    padding: 6px 10px;
+    font-size: 16px; /* Keep at 16px to prevent zoom */
+  }
+}
 .controls button {
   background: #fff7e6;
   border: 1px solid #1b1e22;
@@ -93,3 +211,22 @@
 .chord-table { border-collapse: collapse; margin: 6px 0 10px; background: #fff7e6; box-shadow: 0 2px 6px rgba(0,0,0,0.15); border: 1px solid #1b1e22; }
 .chord-table th, .chord-table td { padding: 6px 10px; border: 1px solid rgba(0,0,0,0.25); text-align: center; font-weight: 800; }
 .chord-table thead th { background: #ffe9b3; }
+
+/* Mobile chord table */
+@media (max-width: 768px) {
+  .chord-table-wrap {
+    padding: 0 16px;
+    overflow-x: auto;
+  }
+  
+  .chord-table {
+    margin: 12px 0;
+    min-width: 100%;
+    font-size: 14px;
+  }
+  
+  .chord-table th, .chord-table td {
+    padding: 8px 6px;
+    min-width: 40px;
+  }
+}
