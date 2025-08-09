@@ -1,0 +1,23 @@
+:root {
+  --paper: #f6f2e9;
+  --ink: #1c1f22;
+}
+
+html, body, #root { height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.app-root {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 28px 12px 16px; /* espacio para el banner IV I V */
+  width: 100%;
+}
+
+/* Evitar selección global al arrastrar */
+* { -webkit-user-select: none; user-select: none; }

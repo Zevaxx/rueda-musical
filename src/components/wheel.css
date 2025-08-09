@@ -1,0 +1,95 @@
+.noselect {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  touch-action: none; /* so pointer events work predictably */
+}
+
+.wheel-wrap {
+  display: grid;
+  gap: 12px;
+  place-items: center;
+  width: 100%;
+  position: relative;
+}
+
+.wheel-svg {
+  width: min(92vw, 900px);
+  height: auto;
+  font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif;
+}
+
+/* Two-column layout: summary (left), svg (right) */
+.ui-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  align-items: start;
+  gap: 18px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.wheel-col { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+
+.summary {
+  background: #fff7e6;
+  color: #1b1e22;
+  border: 1px solid #1b1e22;
+  border-radius: 10px;
+  padding: 10px 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+}
+.summary h3 {
+  margin: 4px 0 8px;
+  font-size: 18px;
+}
+.summary ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+}
+.summary li { display: grid; grid-template-columns: 28px 1fr; align-items: center; }
+.summary .deg { font-weight: 900; opacity: 0.8; }
+.summary .note { font-weight: 800; }
+
+.note-labels text {
+  fill: #fffaf0;
+  paint-order: stroke;
+  stroke: rgba(0,0,0,0.6);
+  stroke-width: 2.2px;
+}
+.note-root { font-size: 24px; font-weight: 900; }
+.note-sub { font-size: 17px; font-weight: 750; fill: #bfead0; }
+.note-dom { font-size: 17px; font-weight: 750; fill: #d6e4ff; }
+
+.roman-big { font-size: 32px; font-weight: 900; fill: #0e0f10; letter-spacing: 1px; }
+
+.roman-by-window text { font-size: 15px; font-weight: 900; fill: #0e0f10; letter-spacing: 0.5px; }
+.degree-on-wheel text { font-size: 13px; font-weight: 800; }
+.roman-extra text { font-size: 12px; font-weight: 800; fill: #0e0f10; opacity: 0.8; }
+.roman-sides text { font-size: 12px; font-weight: 900; fill: #0e0f10; opacity: 0.9; }
+.roman-note { font-size: 12px; font-weight: 800; fill: #333; opacity: 0.9; }
+
+.controls { display: flex; gap: 10px; align-items: center; justify-content: center; margin-top: 6px; }
+.controls button {
+  background: #fff7e6;
+  border: 1px solid #1b1e22;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-weight: 800;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  cursor: pointer;
+}
+.controls .reset { font-size: 12px; opacity: 0.85; }
+.current-key { font-weight: 900; color: #1b1e22; min-width: 100px; text-align: center; }
+.picker { display: inline-flex; gap: 6px; align-items: center; font-weight: 700; }
+.picker select { padding: 4px 8px; border-radius: 6px; border: 1px solid #1b1e22; background: #fff7e6; }
+
+/* Chord table */
+.chord-table-wrap { width: 100%; display: flex; justify-content: center; }
+.chord-table { border-collapse: collapse; margin: 6px 0 10px; background: #fff7e6; box-shadow: 0 2px 6px rgba(0,0,0,0.15); border: 1px solid #1b1e22; }
+.chord-table th, .chord-table td { padding: 6px 10px; border: 1px solid rgba(0,0,0,0.25); text-align: center; font-weight: 800; }
+.chord-table thead th { background: #ffe9b3; }
